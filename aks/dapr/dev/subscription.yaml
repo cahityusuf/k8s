@@ -1,0 +1,12 @@
+apiVersion: dapr.io/v1alpha1
+kind: Subscription
+metadata:
+ name: lawnotification-subscription
+ namespace: dev
+spec:
+ pubsubname: pubsub
+ topic: lawnotification
+ route: v1/topictest
+scopes:
+- commandbff
+- notificationapi

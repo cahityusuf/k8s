@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: useroperationgrpc-svc
+  namespace: otokoc-apps
+  labels:
+    app: otokocuseroperationgrpc
+    service: useroperationgrpc
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    service: useroperationgrpc

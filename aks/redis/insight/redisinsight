@@ -1,0 +1,4 @@
+helm install redisinsight redisinsight-chart-0.1.0.tgz --set service.type=NodePort -n otokoc-redis
+export NODE_PORT=$(kubectl get --namespace otokoc-redis -o jsonpath="{.spec.ports[0].nodePort}" services redisinsight-redisinsight-chart)
+export NODE_IP=$(kubectl get nodes --namespace otokoc-redis -o jsonpath="{.items[0].status.addresses[0].address}")
+echo http://$NODE_IP:$NODE_PORT

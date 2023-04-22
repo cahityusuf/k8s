@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: erpweb-deployment
+  namespace: dev
+  labels:
+    app: erpweb
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      service: erpweb
+  template:
+    metadata:
+      labels:
+        app: erpweb
+        service: erpweb
+    spec:
+      volumes:
+      - name: config
+        configMap:
+          name: erpweb-configmap
+          items:
+          - key: ".env.production"
+            path: ".env.production"      
+      containers:
+        - name: erpweb
+          image: otokocerpdevacr.azurecr.io/erpweb:$(Build.BuildId)
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "1000Mi"
+              cpu: "0.3"
+            limits:
+              memory: "1000Mi"
+              cpu: "0.3"        
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          # securityContext:
+          #   runAsUser: 1000
+          volumeMounts:
+          #override config.js file
+          - name: config
+            mountPath: "/app/.env.production"
+            subPath: ".env.production"
+            readOnly: true

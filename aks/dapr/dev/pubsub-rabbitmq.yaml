@@ -1,0 +1,35 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: pubsub
+  namespace: dev
+spec:
+  type: pubsub.rabbitmq
+  version: v1
+  metadata:
+  - name: host
+    value: "amqp://default_user_hCaNuhoZRh5fkA4FZuf:DpwSkgNAF7KypdxeGxEwislgb7BMr0DI@rabbitmqcluster.rabbitmq-system.svc.cluster.local:5672"
+    #value: "amqp://user:vLZWgtjp40Xr0e0s@rabbitmq-0.rabbitmq-headless.rabbitmq.svc.cluster.local:5672"rabbitmqcluster
+  - name: durable
+    value: "false"
+  - name: deletedWhenUnused
+    value: "false"
+  - name: autoAck
+    value: "false"
+  - name: reconnectWait
+    value: "0"
+  - name: concurrency
+    value: parallel
+  # - name: username
+  #   secretKeyRef:
+  #     name: rabbitmq
+  #     key: username
+  # - name: password
+  #   secretKeyRef:
+  #     name: rabbitmq
+  #     key: password
+scopes:
+  - commandbff
+  - notificationapi
+  - notificationemailapi
+  - taskschedular

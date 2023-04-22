@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: common-configmap
+  namespace: $(namespace)
+data:
+  auditlogging_sqlserverenabledataaudit: $(auditlogging_sqlserverenabledataaudit)
+  logging_sqlserverenable: $(logging_sqlserverenable)
+  elasticsearch_rabbitmq_enable: $(elasticsearch_rabbitmq_enable)
+  apmserver: $(apmserver)
+  apmenvironment: $(apmenvironment)
+  elasticsearch_log_enable: $(elasticsearch_log_enable)
+  security_authority: $(security_authority)
+  useroperation_channelurl: $(useroperation_channelurl)
+  cors_erpwebdev: $(cors_erpwebdev)
+  cors_erpwebprod: $(cors_erpwebprod)
+  azureapplicationinsights_isenabled: $(azureapplicationinsights_isenabled)
+  azureapplicationinsights_instrumentationkey: $(azureapplicationinsightsinstrumentationkey)
+  azureapplicationinsights_enablesqlcommandtextinstrumentation: $(azureapplicationinsights_enablesqlcommandtextinstrumentation)
+  lawapi_url: $(lawapi_url)
+  customerapi_url: $(customerapi_url)
+  organizationapi_url: $(organizationapi_url)
+  staffapi_url: $(staffapi_url)
+  useroperation_url: $(useroperation_url)
+  identitymanamentkey: $(identitymanamentkey)
+  identitymanamenturl: $(identitymanamenturl)
+  redis_connection: $(redis_connection)=$(redispassword)
+  baseurl: $(baseurl)
+

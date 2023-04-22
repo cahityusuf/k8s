@@ -1,0 +1,17 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster
+  namespace: rabbitmq-system
+spec:
+  replicas: 1
+  persistence:
+    storageClassName: managed-csi-premium
+    storage: 20Gi
+  resources:
+    requests:
+      cpu: 500m
+      memory: '0.5'
+    limits:
+      cpu: 1000m
+      memory: 2Gi

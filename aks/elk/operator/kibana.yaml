@@ -1,0 +1,18 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: kibana
+spec:
+  version: 8.5.3
+  count: 3
+  elasticsearchRef:
+    name: "elasticsearch"
+  # secureSettings:
+  # - secretName: kibana-secret-settings
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+
+
+  # kubectl create secret generic kibana-secret-settings --from-literal=xpack.security.encryptionKey=94d2263b1ead716ae228277049f19975aff864fb4fcfe419c95123c1e90938cd

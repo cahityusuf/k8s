@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: erpweb-svc
+  labels:
+    app: otokocerpweb
+    service: erpweb
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  selector:
+    service: erpweb
+  

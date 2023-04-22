@@ -1,0 +1,32 @@
+apiVersion: apm.k8s.elastic.co/v1
+kind: ApmServer
+metadata:
+  name: apm-server
+  namespace: elastic-system
+spec:
+  version: 8.5.3
+  count: 1
+  secureSettings:
+  - secretName: apm-secret-settings
+  config:
+    output:
+      elasticsearch:
+        hosts: ["elasticsearch-es-http:9200"]
+        username: elastic
+        password: "Li7jrJdke62pkI224hO6475R"
+        protocol: "http"
+        ssl.certificate_authorities: ["/usr/share/apm-server/config/elasticsearch-ca/tls.crt"]
+  podTemplate:
+    spec:
+      containers:
+      - name: apm-server
+        volumeMounts:
+        - mountPath: /usr/share/apm-server/config/elasticsearch-ca
+          name: elasticsearch-ca
+          readOnly: true
+      volumes:
+      - name: elasticsearch-ca
+        secret:
+          defaultMode: 420
+          optional: false
+          secretName: fleet-server-agent-es-elastic-system-elasticsearch-ca # This is the secret that holds the Elasticsearch CA cert

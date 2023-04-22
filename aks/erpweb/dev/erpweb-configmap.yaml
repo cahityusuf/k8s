@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: erpweb-configmap
+data:
+  .env.production: |
+    NEXT_PUBLIC_BASE_DOMAIN=https://erpwebbb-dev.otokoc.com.tr
+    NEXT_PUBLIC_IDENTITY_SERVER_DOMAIN=https://logindevvv.otokoc.com.tr
+    NEXT_PUBLIC_IDENTITY_SERVER_CLIENT_ID="otokocerp_web_app"
+    NEXT_PUBLIC_IDENTITY_SERVER_CLIENT_SECRET="a470a244-c6e0-dc0b-1f6d-056dd636410f"
+    NEXT_PUBLIC_IDENTITY_SERVER_CLIENT_SCOPE="openid profile email offline_access LanguageManagement.Api UserOperations.Api Law.Api Webbff.Api Staff.Api Organization.Api Fileserver.Api Customer_api"
+    NEXT_PUBLIC_IDENTITY_SESSION_NAME="oidc.user:https://logindev.otokoc.com.tr:otokocerp_web_app"
+    NEXT_PUBLIC_USER_API=https://logindev.otokoc.com.tr/connect/userinfo
+    # NEXT_PUBLIC_REPORT_SERVER_BASE_URL=http://193.243.195.17/reportserver canlıya alınırken kullanılacak adres"
+    NEXT_PUBLIC_REPORT_SERVER_BASE_URL=http://10.33.1.27/reportserver
+    NEXT_PUBLIC_REPORT_SERVER_FOLDER_NAME="ERPTransformation"
+    NEXT_PUBLIC_OCP_APIM_KEY="e83bff90c8a44d2f952f65a66314e3c7"
+    NEXT_PUBLIC_LANGUAGE_API_URL=https://languagemanagmentapi-dev.otokoc.com.tr
+    NEXT_PUBLIC_USER_API_URL=https://useroperationapi-dev.otokoc.com.tr
+    NEXT_PUBLIC_CUSTOMER_API_URL=https://apitest.otokoc.com.tr/erpcustomerapidevv
+    NEXT_PUBLIC_FILESERVER_API_URL=https://apitest.otokoc.com.tr/erpfileserverapidevv
+    NEXT_PUBLIC_LAW_API_URL=https://apitest.otokoc.com.tr/erplawapidevv
+    NEXT_PUBLIC_WEB_BFF_API_URL=https://apitest.otokoc.com.tr/erpwebbffdevv
+    LANGUAGE_API_SWAGGER_URL=https://languagemanagmentapi-dev.otokoc.com.tr/swagger/v1/swagger.json
+    USER_API_SWAGGER_URL=https://useroperationapi-dev.otokoc.com.tr/swagger/v1/swagger.json
+    CUSTOMER_API_SWAGGER_URL=https://customerapi-dev.otokoc.com.tr/swagger/v1/swagger.json
+    LAW_API_SWAGGER_URL=https://lawapi-dev.otokoc.com.tr/swagger/v1/swagger.json
+    FILESERVER_API_SWAGGER_URL=https://fileserverapi-dev.otokoc.com.tr/swagger/v1/swagger.json
+    WEB_BFF_API_SWAGGER_URL=https://webbffapi-dev.otokoc.com.tr/swagger/v1/swagger.json
+    SESSION_COOKIE_PASSWORD="otokoc_erp_session_123456789_123456789"
+    SESSION_COOKIE_NAME="otokoc_erp_session"
+    NEXT_PUBLIC_DOWNLOAD_TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCI6IjEzRjgzM0VBNjc3MTNGNTlFOTUwMERDMzkzRDExNTAyIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2NjAwMjk5MDksImV4cCI6MjAyMDAyOTkwOSwiaXNzIjoiaHR0cDovL2lkZW50aXR5c2VydmVyLWRldi5vdG9rb2MuY29tLnRyIiwiYXVkIjoiTGFuZ3VhZ2VNYW5hZ2VtZW50LkFwaSIsImNsaWVudF9pZCI6Ik90b2tvY19XZWJfQXBwX0xhbmd1YWdlIiwic3ViIjoiMGUzODg4NDQtODg5Yi00OTg1LWFkNDAtZjg3YWMzYzBjZGUzIiwiYXV0aF90aW1lIjoxNjYwMDI5OTA4LCJpZHAiOiJsb2NhbCIsImlhdCI6MTY2MDAyOTkwOSwic2NvcGUiOlsiTGFuZ3VhZ2VNYW5hZ2VtZW50LkFwaSIsIm9wZW5pZCJdLCJhbXIiOlsicHdkIl19.Bs_PXoxuBf7ecTvYkuOP1lBMK1gjZ0NNmzqORfXx77zpCNRqgFwyuj0XBmNExh0tJINwRSzoHy3JIxov65c-JdNsdAjHtdPqerL6UKv_sdkgP0gL8kxCYrbS9PHtWArEMKC-dENFmieopkkhtoCK54O_mDpYbeyb3G8ncPvWnHaJyi98Lq_xn7SDXmaHPDJsQP2L2tNH1UVkXOpNhtc_6p3TeIj6EMOvCcBCsUWPFgJcjNXbqUuATCnwUD-LkJ6qEAKvcKZEM5emz7eLOCXbFgMkR4yjLa6bk1Y6awQq8Jx-2JXfyy66Vbo18Ry6pKOoHOdJcz8ssQyaFZotL3AFQQ
+

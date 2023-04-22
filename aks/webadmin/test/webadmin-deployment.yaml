@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webadmin-deployment
+  labels:
+    app: webadmin
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      service: webadmin
+  template:
+    metadata:
+      labels:
+        app: webadmin
+        service: webadmin
+    spec:
+      containers:
+        - name: webadmin
+          image: otokocerptestacr.azurecr.io/webadmin:$(Build.BuildId)
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              memory: "1000Mi"
+              cpu: "0.2"
+            limits:
+              memory: "1000Mi"
+              cpu: "0.2"  
+          env:
+            - name:  ASPNETCORE_ENVIRONMENT
+              value:  Production
+            - name: ASPNETCORE_URLS
+              value: http://+:80
+            - name: ConnectionStrings__MailLogConnectionString
+              valueFrom:
+                  configMapKeyRef:
+                    name: webadmin-configmap
+                    key: connection_string                  
+            - name: NotificationUrl
+              valueFrom:
+                  configMapKeyRef:
+                    name: webadmin-configmap
+                    key: notificationurl
+            - name: IdentityServer
+              valueFrom:
+                  configMapKeyRef:
+                    name: webadmin-configmap
+                    key: identityserverurl
+            - name: UserOperationsUrl
+              valueFrom:
+                  configMapKeyRef:
+                    name: webadmin-configmap
+                    key: useroperationurl
+            - name: ElasticApm__ServerUrls
+              valueFrom:
+                  configMapKeyRef:
+                    name: webadmin-configmap
+                    key: apmserver
+            - name: ElasticApm__Environment
+              valueFrom:
+                  configMapKeyRef:
+                    name: webadmin-configmap
+                    key: apmenvironment
+                    

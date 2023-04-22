@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: $(namespace)
+  name: $(deploymentname)
+  labels:
+    app: $(deploymentlabel)
+spec:
+  replicas: $(minreplicas)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      service: $(deploymentlabel)
+  template:
+    metadata:
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: $(deploymentlabel)
+        dapr.io/app-port: "80"
+        dapr.io/config: "dapr-config"
+      labels:
+        app: $(deploymentlabel)
+        service: $(deploymentlabel)
+    spec:
+      #volumes:
+      #- name: app-tls
+          #secret:
+          #secretName: $(appsecrettls)
+      containers:
+        - name: $(containername)
+          image: $(containerregistery)/$(containername):$(Build.BuildId)
+          ports:
+            #- name: https
+            #containerPort: 443
+            #protocol: TCP
+          - name: http
+            containerPort: 80
+            protocol: TCP
+            #volumeMounts:
+            #- name: app-tls
+            # mountPath: /secrets/tls-cert
+            # readOnly: true
+          resources:
+            requests:
+              memory: "1024Mi"
+              cpu: "0.3"
+            limits:
+              memory: "1024Mi"
+              cpu: "1"               
+          env:
+            #- name: ASPNETCORE_Kestrel__Certificates__Default__Password
+            #  value: "17BC7E9D-C790-43A0-97D2-6FBDE5BEAE8F"
+            #- name: ASPNETCORE_Kestrel__Certificates__Default__Path
+            #  value: /secrets/tls-cert/aspnetapp.pfx
+            #- name: ASPNETCORE_URLS
+            # value: https://+:443;http://+:80
+            # - name: OtokocERP.Framework__Data__UnitOfWork__EnableDataAudit
+            #   valueFrom:
+            #       configMapKeyRef:
+            #         name: common-configmap
+            #         key: auditlogging_sqlserverenabledataaudit
+            # - name: OtokocERP.Framework__Logging__EnableWriteToMsSqlServer
+            #   valueFrom:
+            #       configMapKeyRef:
+            #         name: common-configmap
+            #         key: logging_sqlserverenable                
+            - name: OtokocERP.Framework__Security__Jwt__Authority
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: security_authority                    
+            - name: OtokocERP.Framework__CrosDomain__ErpWebProd
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: cors_erpwebprod 
+            - name: OtokocERP.Framework__CrosDomain__ErpWebDev
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: cors_erpwebdev
+            # - name: OtokocERP.Framework__Monitoring__AzureApplicationInsights__IsEnabled
+            #   valueFrom:
+            #       configMapKeyRef:
+            #         name: common-configmap
+            #         key: azureapplicationinsights_isenabled 
+            # - name: OtokocERP.Framework__Monitoring__AzureApplicationInsights__InstrumentationKey
+            #   valueFrom:
+            #       configMapKeyRef:
+            #         name: common-configmap
+            #         key: azureapplicationinsights_instrumentationkey
+            # - name: OtokocERP.Framework__Monitoring__AzureApplicationInsights__EnableSqlCommandTextInstrumentation
+            #   valueFrom:
+            #       configMapKeyRef:
+            #         name: common-configmap
+            #         key: azureapplicationinsights_enablesqlcommandtextinstrumentation
+            - name: ElasticApm__ServerUrls
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: apmserver
+            - name: ElasticApm__Environment
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: apmenvironment
+            - name: OtokocERP.Framework__AzureKeyVault__ClientId
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: identitymanamentkey
+            - name: OtokocERP.Framework__AzureKeyVault__Url
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: identitymanamenturl
+            - name: OtokocERP.Framework__Logging__EnableWriteToRabbitMq
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: elasticsearch_rabbitmq_enable
+            - name: OtokocERP.Framework__Caching__Redis__ConnectionString
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: redis_connection
+            - name: OtokocERP.Framework__BaseUrl
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: baseurl
+

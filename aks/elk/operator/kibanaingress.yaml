@@ -1,0 +1,27 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: kibana-ingress
+  namespace: elastic-system
+  annotations:
+    ingress.class: "nginx"
+    proxy-buffering: "on"
+    proxy-buffer-size: "128k"
+    proxy-buffers-number: "4"
+spec:
+  tls:
+  - hosts:
+    - erpkibana-test.otokoc.com.tr
+    secretName: tls-otokoc
+  ingressClassName: nginx
+  rules:
+  - host: erpkibana-test.otokoc.com.tr
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: elasticsearch-kb-http
+            port:
+              number: 5601

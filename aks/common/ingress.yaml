@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: $(ingressname)
+  annotations:
+#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    ingress.class: "nginx"
+    proxy-buffering: "on"
+    proxy-buffer-size: "128k"
+    proxy-buffers-number: "4"
+spec:
+  tls: 
+  - hosts:
+      - $(hostname)-$(envionment).otokoc.com.tr
+    secretName: tls-otokoc
+  ingressClassName: nginx
+  rules:
+  - host: $(hostname)-$(envionment).otokoc.com.tr
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: $(servicename)
+            port:
+              number: 80

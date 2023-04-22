@@ -1,0 +1,18 @@
+erpweb : 3017
+webbff: 3000
+useroperation: 3001
+adminpanel: 3002
+customerapi: 3003
+commandbff: 3004
+querybff: 3005
+miscondact: 3006
+lawgrpc: 3007
+lawapi: 3008
+fileserver: 3009
+lawbacgroundjob: 3010
+notificationapi: 3011
+lawtracking: 3012
+staffapi: 3013
+notificationservice: 3014
+organizationapi: 3015
+languageapi: 3016

@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: useroperationgrpc-deployment
+  labels:
+    app: useroperationgrpc
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      service: useroperationgrpc
+  template:
+    metadata:
+      labels:
+        app: useroperationgrpc
+        service: useroperationgrpc
+    spec:
+      containers:
+        - name: useroperationgrpc
+          image: otokocerpdevacr.azurecr.io/useroperationgrpc:$(Build.BuildId)
+          imagePullPolicy: Always
+          # securityContext:
+          #   runAsUser: 1000
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              memory: "1000Mi"
+              cpu: "0.3"
+            limits:
+              memory: "1000Mi"
+              cpu: "0.3"
+          env:
+            - name:  ASPNETCORE_ENVIRONMENT
+              value:  Production
+            - name: ConnectionStrings__UserOperationsDbConnectionString
+              value: $(useroperationconnectionstring)               
+            - name: OtokocERP.Framework__DataAudit__SqlServer__ConnectionString
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: dataaudit_connection_string
+            - name: OtokocERP.Framework__TaskScheduling__Hangfire__DataBaseName
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: taskscheduling_connection_string                    
+            - name: OtokocERP.Framework__Monitoring__SqlServerStorage__ConnectionString
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: monitoring_connection_string                    
+            - name: OtokocERP.Framework__Logging__LogToMsSqlServerOptions__ConnectionString        
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: logging_connection_string
+            - name: OtokocERP.Framework__RabbitMqOptions__ConnectionString
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: rabbitmq_string                    
+            - name: OtokocERP.Framework__RabbitMqOptions__User
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: rabbitmq_user
+            - name: OtokocERP.Framework__RabbitMqOptions__Pass
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: rabbitmq_password            
+            - name: OtokocERP.Framework__Caching__Redis__ConnectionString
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: redis_connection
+            - name: OtokocERP.Framework__SignalR__StateStore__ConnectionString
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: redis_connection
+            - name: OtokocERP.Framework__Data__UnitOfWork__SqlServerEnableDataAudit
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: auditlogging_sqlserverenabledataaudit
+            - name: OtokocERP.Framework__Logging__LogToElasticSearchOptions__Uri
+              valueFrom:
+                  configMapKeyRef:
+                    name: useroperation-configmap
+                    key: elasticsearch_connection
+            - name: OtokocERP.Framework__Logging__EnableWriteToElasticSearch
+              valueFrom:
+                  configMapKeyRef:
+                    name: webbff-configmap
+                    key: elasticsearch_log_enable 
+            - name: OtokocERP.Framework__Api__AllowAnonymous
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: allowanonymous
+            - name: OtokocERP.Framework__Security__Jwt__Authority
+              valueFrom:
+                  configMapKeyRef:
+                    name: common-configmap
+                    key: security_authority

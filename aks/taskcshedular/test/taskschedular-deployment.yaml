@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskschedular-deployment
+  labels:
+    app: taskschedular
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      service: taskschedular
+  template:
+    metadata:
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: taskschedular
+        dapr.io/app-port: "80"
+        dapr.io/config: "dapr-config"
+      labels:
+        app: taskschedular
+        service: taskschedular
+    spec:
+      containers:
+        - name: taskschedular
+          image: otokocerptestacr.azurecr.io/taskschedular:$(Build.BuildId)
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /taskscheduling/run
+              port: 80
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "0.3"
+            limits:
+              memory: "500Mi"
+              cpu: "0.3"
+          env:
+            - name:  ASPNETCORE_ENVIRONMENT
+              value:  Production
+            - name: ASPNETCORE_URLS
+              value: http://+:80
+            - name: TaskScheduling__Hangfire__DataBaseName
+              valueFrom:
+                  configMapKeyRef:
+                    name: taskschedular-configmap
+                    key: connection_string

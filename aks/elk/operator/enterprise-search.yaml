@@ -1,0 +1,26 @@
+apiVersion: enterprisesearch.k8s.elastic.co/v1
+kind: EnterpriseSearch
+metadata:
+  name: enterprise-search
+  namespace: elastic-system
+spec:
+  version: 7.17.3
+  count: 1
+  elasticsearchRef:
+    name: elasticsearch
+    namespace: elastic-system
+# ---
+# kind: Secret
+# apiVersion: v1
+# metadata:
+#   name: smtp-credentials
+# stringData:
+#   enterprise-search.yml: |-
+#     email.account.enabled: true
+#     email.account.smtp.auth: plain
+#     email.account.smtp.starttls.enable: false
+#     email.account.smtp.host: 127.0.0.1
+#     email.account.smtp.port: 25
+#     email.account.smtp.user: myuser
+#     email.account.smtp.password: mypassword
+#     email.account.email_defaults.from: my@email.com

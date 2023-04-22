@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: taskschedular-svc
+  labels:
+    app: otokoctaskschedular
+    service: taskschedular
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    service: taskschedular

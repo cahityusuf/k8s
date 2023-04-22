@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskschedular-deployment
+  labels:
+    app: taskschedular
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      service: taskschedular
+  template:
+    metadata:
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: taskschedular
+        dapr.io/app-port: "80"
+        dapr.io/config: "dapr-config"
+      labels:
+        app: taskschedular
+        service: taskschedular
+    spec:
+      containers:
+      - name: taskschedular
+        image: otokocerpdevacr.azurecr.io/taskschedular:$(Build.BuildId)
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /taskscheduling/run
+            port: 80
+            httpHeaders:
+            - name: Accept
+              value: application/json
+          periodSeconds: 0
+          failureThreshold: 1
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "0.3"
+          limits:
+            memory: "500Mi"
+            cpu: "0.3"
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: ASPNETCORE_URLS
+          value: http://+:80
+        - name: TaskScheduling__Hangfire__DataBaseName
+          valueFrom:
+            configMapKeyRef:
+              name: taskschedular-configmap
+              key: connection_string
+        - name: OtokocERP.Framework__Security__Jwt__Authority
+          valueFrom:
+            configMapKeyRef:
+              name: common-configmap
+              key: security_authority                    
+        - name: OtokocERP.Framework__CrosDomain__ErpWebProd
+          valueFrom:
+            configMapKeyRef:
+              name: common-configmap
+              key: cors_erpwebprod 
+        - name: OtokocERP.Framework__CrosDomain__ErpWebDev
+          valueFrom:
+            configMapKeyRef:
+              name: common-configmap
+              key: cors_erpwebdev
+        - name: ElasticApm__ServerUrls
+          valueFrom:
+            configMapKeyRef:
+              name: common-configmap
+              key: apmserver
+        - name: ElasticApm__Environment
+          valueFrom:
+            configMapKeyRef:
+              name: common-configmap
+              key: apmenvironment
+        - name: OtokocERP.Framework__AzureKeyVault__ClientId
+          valueFrom:
+            configMapKeyRef:
+              name: common-configmap
+              key: identitymanamentkey
+        - name: OtokocERP.Framework__AzureKeyVault__Url
+          valueFrom:
+            configMapKeyRef:
+              name: common-configmap
+              key: identitymanamenturl
+        - name: OtokocERP.Framework__Logging__EnableWriteToRabbitMq
+          valueFrom:
+            configMapKeyRef:
+              name: common-configmap
+              key: elasticsearch_rabbitmq_enable
+        - name: OtokocERP.Framework__Caching__Redis__ConnectionString
+          valueFrom:
+            configMapKeyRef:
+              name: common-configmap
+              key: redis_connection
